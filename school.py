@@ -107,15 +107,13 @@ class uploadtransport(object):
     dict_point_name_list = {}
     if len(point_record)>0:
         for point in point_record:
-            dict_point_name_list.setdefault(point.get("name"),{'id':point.get("id"),'amount':{point.get("m_amount")}})
-            print("dict_point_name_list")
+            dict_point_name_list.setdefault(point.get("name"),point.get("id"))
             
     # add vehicle to dict
     dict_vehicle_name_list = {}
     if len(vehicle_record)>0:
         for vehi in vehicle_record:
-            dict_vehicle_name_list.setdefault(vehi.get("vehicle"),vehi.get("id"))
-            print("dict_vehicle_name_list")
+            dict_vehicle_name_list.setdefault(vehi.get("vehicle"),{'id':vehi.get("id"),'m_amount':{}})
             
     """# add attribute to dict
     dict_attribute = {}
@@ -160,7 +158,7 @@ class uploadtransport(object):
         for comp in company_record:
             dict_company.setdefault(comp.get("name"),comp.get("id")) """
 
-    #------------------------------ function to create product --------------------------
+    #------------------------------ function to create participant --------------------------
     
     @classmethod
     def createParticipant(self,row):
@@ -172,12 +170,14 @@ class uploadtransport(object):
                     'name': row[2],
                     'vehicle_id': (row[3]),
                     'point_id' : (row[4]),
-                    'for_month': (row[6]),
+                    'for_month' : '6',
+                    'reg_date' : ' ',
+                    'reg_end_date' : ' ',
                     }])
         self.description = ""
         
         id = self.models.execute_kw(self.db, self.uid, self.password,
-                    'transport.registration',
+                    'product.template',
                     'write',[[id], {
                     'attribute_line_ids': [[6,0,self.checkAttributeLine(row,id)]],
                     }])
